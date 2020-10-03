@@ -10,7 +10,7 @@ import java.util.zip.ZipInputStream
 
 class ListenerLoader {
     companion object {
-        private val logger = LoggerFactory.getLogger(ListenerLoader::class.java)
+        private val logger = LoggerFactory.getLogger(this::class.java)
         val listeners = CopyOnWriteArrayList<Listener>()
         private fun register(listener: Listener) {
             listeners.add(listener)
