@@ -25,17 +25,45 @@ class ListenerLoader {
             logger.debug("gotten listeners directory")
 
             logger.debug("getting listeners property...")
-            directory.listFiles()?.forEach {
-                if (!it.isFile) return@forEach
+            directory.listFiles()?.forEach { file ->
+                if (!file.isFile) return@forEach
 
-                val input = ZipInputStream(BufferedInputStream(FileInputStream(it)))
+                val input = ZipInputStream(BufferedInputStream(FileInputStream(file)))
 
                 while (true) {
                     val entry = input.nextEntry ?: break
                     if (entry.name != "listener.2tjson") continue
-                    String(input.readAllBytes()).let {
-                        ObjectMapper().readValue(it, TwoTJson::class.java)
-                    }
+
+                    val string = String(input.readAllBytes())
+
+                    val coreClassString = ObjectMapper()
+                        .readValue(string, TwoTJson::class.java)
+                        .listenerProperty
+                        .listenerCoreClass
+
+                    val coreClass = ClassLoader
+                        .getSystemClassLoader()
+                        .loadClass(coreClassString)
+
+                    if (coreClass.superclass != Listener::class.java)
+                        throw Exception("${coreClass.simpleName} don't have ${Listener::class.java.simpleName} on superclass")
+
+                    var instance: Any? = null
+
+                    coreClass
+                        .constructors
+                        .iterator()
+                        .forEachRemaining {
+                            try {
+                                instance = it.newInstance()
+                            } catch (e: IllegalAccessException) {
+                                return@forEachRemaining
+                            } catch (e: IllegalArgumentException) {
+                                return@forEachRemaining
+                            }
+                        }
+                    if (instance == null) throw Exception("can't create ${coreClass.simpleName} instance")
+                    listeners.add(instance as Listener)
                 }
             } ?: throw Exception("can't get listeners file")
             logger.debug("gotten listeners property")
