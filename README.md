@@ -1,5 +1,8 @@
 # (Kotlin)2Meat
 
+[![hackmd-github-sync-badge](https://hackmd.io/xttac6OzR9ix78AAAdsYYw/badge)](https://hackmd.io/xttac6OzR9ix78AAAdsYYw)
+
+
 ### 概要
 
 Nanai10aのDiscordbot
