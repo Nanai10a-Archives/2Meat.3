@@ -11,8 +11,8 @@ import java.util.zip.ZipInputStream
 class ListenerLoader {
     companion object {
         private val logger = LoggerFactory.getLogger(ListenerLoader::class.java)
-        val listeners = CopyOnWriteArrayList<ListenerProperty>()
-        private fun register(listener: ListenerProperty) {
+        val listeners = CopyOnWriteArrayList<Listener>()
+        private fun register(listener: Listener) {
             listeners.add(listener)
             logger.debug("listener ${listener.name} was registered")
         }
