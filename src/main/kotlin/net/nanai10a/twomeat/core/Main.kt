@@ -16,9 +16,11 @@ fun main(args: Array<String>) {
     runBlocking {
         val bootedTime = Instant.now()
 
-        var isShutdown = false
-        val stream = PrintStream(File("2Meat-log-${Instant.now()}.log"))
-        System.setErr(stream)
+    var isShutdown = false
+    val logFile = File("2Meat-log-${Instant.now().toString().replace(":", "-")}.log")
+    logFile.createNewFile()
+    val stream = PrintStream(logFile)
+    System.setErr(stream)
 
         launch(Dispatchers.IO) {
             while (!isShutdown)
