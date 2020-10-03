@@ -80,13 +80,11 @@ fun main(args: Array<String>) {
                 val listener_ = if (listenersNum <= 1) "listeners" else "listener"
                 logger.debug("$listenersNum $listener_ initialized")
 
-                logger.debug("adding $listener_...")
-                jda.addEventListener(*listeners.toTypedArray())
-                logger.debug("added $listener_")
-            }
-
-
-            logger.info("initialized at ${Instant.now().until(bootedTime, ChronoUnit.SECONDS)}sec")
+        logger.debug("adding $listener_...")
+        jda.addEventListener(*listeners.toTypedArray())
+        logger.debug("added $listener_")
+    }
+    logger.info("initialized at ${bootedTime.until(Instant.now(), ChronoUnit.SECONDS)}sec")
 
             logger.info("system started")
         }
