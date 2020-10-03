@@ -52,23 +52,14 @@ fun main(args: Array<String>) = runBlocking {
     logger.debug("JDA instance had built.")
     logger.info("JDA (Java Discord API) ver. 4.2.0_207")
 
-    logger.debug("listener-loader init")
-    val loader = ListenerLoader()
-    logger.debug("listener-loader initialized")
+    logger.debug("listener-loader is loading...")
+    ListenerLoader.load()
+    logger.debug("listener-loader had loaded")
 
-    logger.debug("listener-loader load")
-    loader.load()
-    logger.debug("listener-loader loaded")
-
-    loader.loadedListeners.let {
-        val listeners: List<Listener> = it ?: let {
-            logger.warn("listeners-list is null!")
-            ArrayList()
-        }
-
+    ListenerLoader.listeners.let {
         var listenersNum = 0
         logger.debug("listeners initialing...")
-        listeners.forEach { listener ->
+        it.forEach { listener ->
             listenersNum++
             logger.debug("listener #$listenersNum [${listener.name}] is initialing...")
             listener.init()
@@ -80,7 +71,7 @@ fun main(args: Array<String>) = runBlocking {
         logger.debug("$listenersNum $listener_ initialized")
 
         logger.debug("adding $listener_...")
-        jda.addEventListener(*listeners.toTypedArray())
+        jda.addEventListener(*it.toTypedArray())
         logger.debug("added $listener_")
     }
     logger.info("initialized at ${bootedTime.until(Instant.now(), ChronoUnit.SECONDS)}sec")

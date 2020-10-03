@@ -1,9 +1,12 @@
 package net.nanai10a.twomeat.core
 
-class ListenerLoader {
-    private var _loadedListeners: List<Listener>? = null
-    val loadedListeners
-        get() = _loadedListeners
+import java.util.concurrent.CopyOnWriteArrayList
 
-    fun load() {}
+class ListenerLoader {
+    companion object {
+        val listeners = CopyOnWriteArrayList<Listener>()
+        fun register(listener: Listener) {}
+
+        fun load() {}
+    }
 }
