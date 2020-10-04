@@ -26,21 +26,33 @@ class ListenerLoader {
 
             logger.debug("getting listeners property...")
             directory.listFiles()?.forEach { file ->
-                if (!file.isFile) return@forEach
+                if (!file.isFile) {
+                    logger.debug("${file.name} (${file.absolutePath}) is not file")
+                    return@forEach
+                }
 
+                logger.debug("open InputStream! (${file.absolutePath})")
                 val input = ZipInputStream(BufferedInputStream(FileInputStream(file)))
 
                 while (true) {
                     val entry = input.nextEntry ?: break
                     if (entry.name != "listener.2tjson") continue
 
+                    logger.debug("found 2tjson! (${entry.name}) ")
+
+                    logger.debug("read all bytes of 2tjson!")
                     val string = String(input.readAllBytes())
 
+                    input.close()
+                    logger.debug("closed InputStream...")
+
+                    logger.debug("read bytes Analyzing...")
                     val coreClassString = ObjectMapper()
                         .readValue(string, TwoTJson::class.java)
                         .listenerProperty
                         .listenerCoreClass
 
+                    logger.debug("loading coreClass...")
                     val coreClass = ClassLoader
                         .getSystemClassLoader()
                         .loadClass(coreClassString)
@@ -50,6 +62,7 @@ class ListenerLoader {
 
                     var instance: Any? = null
 
+                    logger.debug("calling constructor...")
                     coreClass
                         .constructors
                         .iterator()
@@ -63,10 +76,11 @@ class ListenerLoader {
                             }
                         }
                     if (instance == null) throw Exception("can't create ${coreClass.simpleName} instance")
+                    logger.debug("created listener instance! (${{instance as Listener}.invoke().name} ver. ${{instance as Listener}.invoke().version} )")
                     listeners.add(instance as Listener)
                 }
             } ?: throw Exception("can't get listeners file")
-            logger.debug("gotten listeners property")
+            logger.debug("gotten listeners property!")
         }
     }
 }
