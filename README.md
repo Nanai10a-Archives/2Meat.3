@@ -55,8 +55,7 @@ jarのrootに`listener.2tjson`という指定されたJsonフォーマットの�
 \*`del`(delete) - 登録済み*script*を削除する
 
 `help` - help me!  
-`info` - *misc*  
-`@mention` - 概要
+`info` - *misc*
 
 ### isso-command - isso>
 
@@ -77,8 +76,7 @@ jarのrootに`listener.2tjson`という指定されたJsonフォーマットの�
 \*`del`(delete) - 削除する
 
 `help` - help me!  
-`info` - *misc*  
-`@mention` - 概要
+`info` - *misc*
 
 ### toast - ts>
 
@@ -87,6 +85,5 @@ jarのrootに`listener.2tjson`という指定されたJsonフォーマットの�
 //考案中
 
 `help` - help me!  
-`info` - *misc*  
-`@mention` - 概要
+`info` - *misc*
 
